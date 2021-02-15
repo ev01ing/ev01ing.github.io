@@ -1,0 +1,213 @@
+baseURL = "https://ev01ing.me/"
+defaultContentLanguage = "zh-cn"
+languageCode = "zh-CN"
+hasCJKLanguage = true
+title = "ev01ing的个人博客"
+theme = "Loveit"
+summaryLength = "80"
+
+[author]
+  name = "ev01ing"
+  link = "https://ev01ing.me/"
+
+[params]
+  version = "0.2.X"
+  defaultTheme = "auto"
+  keywords = []
+  gitRepo = ""
+  dateFormat = "2006-01-02"
+  images = ["/logo.png"]
+
+  [params.search]
+    enable = false
+    # 搜索引擎的类型 ("lunr", "algolia")
+    type = "lunr"
+    # 文章内容最长索引长度
+    contentLength = 4000
+    # 搜索框的占位提示语
+    placeholder = ""
+    # LoveIt 新增 | 0.2.1 最大结果数目
+    maxResultLength = 10
+    # LoveIt 新增 | 0.2.3 结果内容片段长度
+    snippetLength = 50
+    # LoveIt 新增 | 0.2.1 搜索结果中高亮部分的 HTML 标签
+    highlightTag = "em"
+    # LoveIt 新增 | 0.2.4 是否在搜索索引中使用基于 baseURL 的绝对路径
+    absoluteURL = false
+    [params.search.algolia]
+      index = ""
+      appID = ""
+      searchKey = ""
+
+  [params.header]
+    desktopMode = "fixed"
+    mobileMode = "auto"
+
+  [params.footer]
+    enable = true
+    hugo = true
+    since = 2017
+    license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+
+  [params.list]
+    paginate = 20
+    dateFormat = "01-02"
+    rss = 10
+
+  [params.home]
+    rss = 10
+
+    [params.home.posts]
+      enable = true
+      paginate = 10
+
+    [params.home.profile]
+      enable = true
+      # Gravatar 邮箱，用于优先在主页显示的头像
+      gravatarEmail = ""
+      # 主页显示头像的 URL
+      #avatarURL = "/images/avatar.png"
+      avatarURL = "avatar.jpg"
+      # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = ""
+      # 主页显示的网站副标题
+      subtitle = "我会在这里分享我的文章"
+      # 是否为副标题显示打字机动画
+      typeit = true
+      # 是否显示社交账号
+      social = true
+      # LoveIt 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+      disclaimer = ""
+
+  [params.section]
+    paginate = 100
+    dateFormat = "01-02"
+    rss = 10
+
+  [params.typeit]
+    # 每一步的打字速度 (单位是毫秒)
+    speed = 100
+    # 光标的闪烁速度 (单位是毫秒)
+    cursorSpeed = 1000
+    # 光标的字符 (支持 HTML 格式)
+    cursorChar = "|"
+    # 打字结束之后光标的持续时间 (单位是毫秒, "-1" 代表无限大)
+    duration = -1
+
+  [params.page]
+    hiddenFromHomePage = false
+    hiddenFromSearch = false
+    twemoji = false
+    lightgallery = true
+    ruby = true
+    fraction = true
+    fontawesome = true
+    linkToMarkdown = false
+    rssFullText = true
+
+    [params.page.code]
+      copy = false
+
+    [params.page.share]
+      enable = true
+      Weibo = true
+      Twitter = false
+      Facebook = false
+      Linkedin = false
+      Whatsapp = false
+      Pinterest = false
+      Tumblr = false
+      HackerNews = false
+      Reddit = false
+      VK = false
+      Buffer = false
+      Xing = false
+      Line = false
+      Instapaper = false
+      Pocket = false
+      Digg = false
+      Stumbleupon = false
+      Flipboard = false
+      Renren = false
+      Myspace = false
+      Blogger = false
+      Baidu = false
+      Odnoklassniki = false
+      Evernote = true
+      Skype = false
+      Trello = false
+      Mix = false
+
+[menu]
+  [[menu.main]]
+  	identifier = "posts"
+  	pre = ""
+  	post = ""
+  	name = "所有文章"
+  	url = "/posts/"
+  	title = "按时间线展示"
+  	weight = 4
+  [[menu.main]]
+  	identifier = "categories"
+  	pre = ""
+  	post = ""
+  	name = "分类"
+  	url = "/categories/"
+  	title = "所有分类"
+  	weight = 2
+  [[menu.main]]
+  	identifier = "tags"
+  	pre = ""
+  	post = ""
+  	name = "标签"
+  	url = "/tags/"
+  	title = "所有标签"
+  	weight = 3
+  [[menu.main]]
+  	name = "关于"
+  	url = "/about"
+  	title = "关于我们"
+  	weight = 5
+  [[menu.main]]
+    identifier = "github"
+    pre = "<i class='fab fa-github fa-fw'></i>"
+    post = ""
+    name = ""
+    url = "https://github.com/ev01ing"
+    title = "GitHub"
+    weight = 6
+
+[markup]
+  [markup.highlight]
+     noClasses = false
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MarkDown"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  taxonomyTerm = ["HTML"]
+
+[mediaTypes]
+  [mediaTypes."text/plain"]
+    suffixes = ["md"]
+
+[outputFormats.MarkDown]
+  mediaType = "text/plain"
+  isPlainText = true
+  isHTML = false
+
+
+
+
+
