@@ -1,4 +1,4 @@
-baseURL = "https://ev01ing.me/"
+#baseURL = "https://ev01ing.me/"
 defaultContentLanguage = "zh-cn"
 languageCode = "zh-CN"
 hasCJKLanguage = true
