@@ -88,7 +88,7 @@ summaryLength = "80"
     enable = true
     # Google Analytics
     [params.analytics.google]
-      id = "G-XC9WZGJ8K6"
+      id = "3138433953"
       # whether to anonymize IP
       # 是否匿名化用户 IP
       anonymizeIP = true
