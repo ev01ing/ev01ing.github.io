@@ -84,15 +84,6 @@ summaryLength = "80"
     dateFormat = "01-02"
     rss = 10
 
-  [params.analytics]
-    enable = true
-    # Google Analytics
-    [params.analytics.google]
-      id = "G-XC9WZGJ8K6"
-      # whether to anonymize IP
-      # 是否匿名化用户 IP
-      anonymizeIP = true
-
   [params.typeit]
     # 每一步的打字速度 (单位是毫秒)
     speed = 100
