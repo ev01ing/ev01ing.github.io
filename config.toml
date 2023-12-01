@@ -106,7 +106,8 @@ summaryLength = "80"
     rssFullText = true
 
     [params.page.code]
-      copy = false
+      copy = true
+      maxShownLines = 50
 
     [params.page.share]
       enable = true
