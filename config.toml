@@ -6,6 +6,9 @@ title = "ev01ing的个人博客"
 theme = "Loveit"
 summaryLength = "80"
 
+googleAnalytics = "G-3DF42CMVVZ"
+
+
 [author]
   name = "ev01ing"
   link = "https://ev01ing.me/"
@@ -106,7 +109,8 @@ summaryLength = "80"
     rssFullText = true
 
     [params.page.code]
-      copy = false
+      copy = true
+      maxShownLines = 50
 
     [params.page.share]
       enable = true

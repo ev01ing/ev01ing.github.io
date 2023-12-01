@@ -6,7 +6,7 @@ draft: false
 author: ev01ing 
 keepStatic: false
 auto: true
-categories: []
+categories: ["java"]
 tags: ["java", "数字证书"]
 featuredImage : featured-image.png
 lightgallery: true
