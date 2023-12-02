@@ -1,21 +1,144 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>ev01ing的个人博客</title>
-        <link>https://ev01ing.me/</link>
+        <link>/</link>
         <description>ev01ing的个人博客</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 15 Feb 2021 17:57:17 &#43;0800</lastBuildDate>
-            <atom:link href="https://ev01ing.me/index.xml" rel="self" type="application/rss+xml" />
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 01 Dec 2023 10:33:17 &#43;0800</lastBuildDate>
+            <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>python ftp客户端使用 ftplib</title>
+    <link>/posts/python-ftplib-20231201/</link>
+    <pubDate>Fri, 01 Dec 2023 10:33:17 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>/posts/python-ftplib-20231201/</guid>
+    <description><![CDATA[<p>使用python的<code>ftplib</code>进行ftp操作，是python3的标准库，不需要安装。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">ftplib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="k">class</span> <span class="nc">FTPClient</span><span class="p">():</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="s2">&#34;/&#34;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span> <span class="o">=</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">FTP</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&#34;UTF-8&#34;</span>
+
+    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">local_path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        从FTP服务器下载文件到本地
+</span><span class="s2">
+</span><span class="s2">        参数：
+</span><span class="s2">        path (str): 文件所在路径
+</span><span class="s2">        filename (str): 文件名
+</span><span class="s2">        local_path (str): 本地保存路径
+</span><span class="s2">
+</span><span class="s2">        返回：  无
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="n">remote_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">remote_filename</span><span class="p">,</span>
+                            <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">remote_filename</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">listdir_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="c1"># 递归地列出指定路径下的所有文件和文件夹的名称</span>
+        <span class="n">filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_directory</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+                <span class="n">t_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listdir_recursive</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">t_files</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;unkown ftp path: </span><span class="si">%s</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">fullname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+    <span class="k">def</span> <span class="nf">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">):</span>
+        <span class="c1"># 列出路径下的文件和文件夹，非递归</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="n">remote_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">is_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        判断给定路径是否为目录
+</span><span class="s2">
+</span><span class="s2">        参数：
+</span><span class="s2">        path：要判断的路径
+</span><span class="s2">
+</span><span class="s2">        返回值：True or False
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        判断给定路径是否是一个文件
+</span><span class="s2">
+</span><span class="s2">        :param path: 文件路径
+</span><span class="s2">        :return: 若给定路径是一个文件则返回True，否则返回False
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">paths</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        将多个路径拼接成一个路径。
+</span><span class="s2">
+</span><span class="s2">        :param paths: 多个路径，可以为空
+</span><span class="s2">        :type paths: str
+</span><span class="s2">        :return: 拼接后的路径
+</span><span class="s2">        :rtype: str
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&#34;&#34;</span>
+
+        <span class="n">new_path</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="n">new_path</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sep</span>
+            <span class="n">new_path</span> <span class="o">+=</span> <span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">new_path</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        关闭FTP连接
+</span><span class="s2">
+</span><span class="s2">        :return: None
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div>]]></description>
+</item><item>
     <title>java获取网站的证书链和证书信息解析转换</title>
-    <link>https://ev01ing.me/posts/certifcate-java-get-and-convert/</link>
+    <link>/posts/certifcate-java-get-and-convert/</link>
     <pubDate>Mon, 15 Feb 2021 17:57:17 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://ev01ing.me/posts/certifcate-java-get-and-convert/</guid>
+    <guid>/posts/certifcate-java-get-and-convert/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/featured-image.png" referrerpolicy="no-referrer">
             </div><p>本文主要集中在实践上，将在代码层面上讲述如何获取证书链并解析证书中的信息。本文不会过多的讲解数字证书的一些理论和细节，只会点到即止。</p>
 <h2 id="java获取域名的证书链">java获取域名的证书链</h2>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">domain</span> <span class="o">=</span> <span class="s">&#34;nti.nsfocus.com&#34;</span><span class="o">;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">domain</span> <span class="o">=</span> <span class="s">&#34;nti.nsfocus.com&#34;</span><span class="o">;</span>
 <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">&#34;https://&#34;</span> <span class="o">+</span> <span class="n">domain</span><span class="o">);</span>
 <span class="n">HttpsURLConnection</span> <span class="n">connection</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpsURLConnection</span><span class="o">)</span> <span class="n">url</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
 
@@ -30,12 +153,11 @@
 </code></pre></div><p>如上所示就可以获取到nti.nsfocus.com的证书链，获取到的证书链第一个证书是网站网站的证书，后面的是CA的证书。获取到的顺序和下图正好是相反的，下图是nti.nsfocus.com的证书路径，最下面是<code>*.nsfocus.com</code>的证书，中间是<code>*.nsfocus.com</code>的办法机构的证书，第一个是root证书，root证书签发了RapidSSL的证书，也就是图中的第二个证书。</p>
 <!-- raw HTML omitted -->
 <figure>
-     
 </figure>
 
 <p>java获取一个网站的证书过程和浏览器访问一个网站类似，会对网站证书进行合规性检查。比如这个网站的证书是否符合证书声明的dns域，或者证书是否过期。</p>
 <p>下述代码声明了不检查证书的dns域是否合规。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">connection</span><span class="o">.</span><span class="na">setHostnameVerifier</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">http</span><span class="o">.</span><span class="na">conn</span><span class="o">.</span><span class="na">ssl</span><span class="o">.</span><span class="na">SSLSocketFactory</span><span class="o">.</span><span class="na">ALLOW_ALL_HOSTNAME_VERIFIER</span><span class="o">);</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">connection</span><span class="o">.</span><span class="na">setHostnameVerifier</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">http</span><span class="o">.</span><span class="na">conn</span><span class="o">.</span><span class="na">ssl</span><span class="o">.</span><span class="na">SSLSocketFactory</span><span class="o">.</span><span class="na">ALLOW_ALL_HOSTNAME_VERIFIER</span><span class="o">);</span>
 
 <span class="c1">//        &lt;dependency&gt;
 </span><span class="c1">//            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
@@ -45,11 +167,10 @@
 </span></code></pre></div><p>比如nti.nsfocus.com的证书dns域为<code>*.nsfocus.com</code>，表示所有nsfocus.com的子域名均可以使用。但是如果nsfocus.com.cn也是用这个域名chrome就会报警，同样我们上述的java代码也会抛出异常。</p>
 <!-- raw HTML omitted -->
 <figure>
-     
 </figure>
 
 <p>同样，除了dns域的检查，java代码也会对证书的合法性进行验证，比如是不是可信CA签发的证书，是不是已经过期，不合法的情况也会抛出异常。下述代码可以让代码不进行这种检查，就是让代码接受所有的证书，无论是可信机构签发的证书，还是自签的证书，或者已经过期的证书，都会认为合法。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">javax.net.ssl.*</span><span class="o">;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">javax.net.ssl.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.security.GeneralSecurityException</span><span class="o">;</span>
 
 <span class="kd">private</span> <span class="kd">static</span> <span class="n">SSLSocketFactory</span> <span class="nf">getTrustSelfSignedSSLSockFactory</span><span class="o">()</span> <span class="o">{</span>
@@ -86,9 +207,9 @@
 </code></pre></div><h2 id="提取转化数字证书中的信息">提取转化数字证书中的信息</h2>
 <h3 id="信息提取">信息提取</h3>
 <p><code>java.security.cert.X509Certificate</code>是java提供的证书类，我们使用上述代码获取的到的<code>Certificate</code>对象可以直接转换成该对象</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">X509Certificate</span> <span class="n">certificate</span> <span class="o">=</span> <span class="o">(</span><span class="n">X509Certificate</span><span class="o">)</span> <span class="n">cert</span><span class="o">;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">X509Certificate</span> <span class="n">certificate</span> <span class="o">=</span> <span class="o">(</span><span class="n">X509Certificate</span><span class="o">)</span> <span class="n">cert</span><span class="o">;</span>
 </code></pre></div><p>获取到这个<code>X509Certificate</code>对象后就可以利用他提供的解析方法提取其中的信息。<code>X509Certificate</code>提供了很多get方法来获取其中的信息，</p>
-<pre><code>X509Certificate certificate =  (X509Certificate) cert;
+<pre tabindex="0"><code>X509Certificate certificate =  (X509Certificate) cert;
 
 // 获取证书的生效时间和过期时间
 certificate.getNotBefore();
@@ -107,7 +228,7 @@ certificate.getSubjectAlternativeNames();
 // 证书的编号，编号应以16进制进行编码，不舍弃前缀0。直接getSerialNumber()是一个大整数
 byte2Hex(certificate.getSerialNumber().toByteArray());
 </code></pre><h3 id="证书颁发者和使用者的x500principal数据解析">证书颁发者和使用者的<code>X500Principal</code>数据解析。</h3>
-<pre><code>LdapName ldapDN = null;
+<pre tabindex="0"><code>LdapName ldapDN = null;
 try {
     ldapDN = new LdapName(x500Principal.getName());
 } catch (InvalidNameException e) {
@@ -139,7 +260,7 @@ for (Rdn rdn : ldapDN.getRdns()) {
 }
 
 </code></pre><h3 id="使用者可选名称的解析">使用者可选名称的解析。</h3>
-<pre><code>Collection&lt;List&lt;?&gt;&gt; alternativeNames = certificate.getSubjectAlternativeNames();
+<pre tabindex="0"><code>Collection&lt;List&lt;?&gt;&gt; alternativeNames = certificate.getSubjectAlternativeNames();
 
 for (List&lt;?&gt; name : alternativeNames) {
     // name 是 [one, two]这种形式，one是key，two是value
@@ -151,10 +272,10 @@ for (List&lt;?&gt; name : alternativeNames) {
 }
 </code></pre><h3 id="证书的指纹">证书的指纹</h3>
 <p>windows平台展示证书信息中的指纹其实是证书sha1哈希值。除了sha1，其他哈希都可以算出来。计算证书的哈希要对其字节数组进行计算才可以。</p>
-<pre><code>byte[] certEncode = certificate.getEncoded();
+<pre tabindex="0"><code>byte[] certEncode = certificate.getEncoded();
 </code></pre><p>对<code>certEncode</code>进行相应的哈希计算就可以得到证书的其他哈希值。</p>
 <h3 id="证书base64编码保存和解码">证书base64编码保存和解码</h3>
-<pre><code>// java.util.Base64
+<pre tabindex="0"><code>// java.util.Base64
 public String encodeCertificate(Certificate certificate) {
     try {
         return new String(Base64.getEncoder().encode(certificate.getEncoded()));

@@ -1,0 +1,130 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>ftplib - 标签 - ev01ing的个人博客</title>
+        <link>/tags/ftplib/</link>
+        <description>ftplib - 标签 - ev01ing的个人博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 01 Dec 2023 10:33:17 &#43;0800</lastBuildDate><atom:link href="/tags/ftplib/" rel="self" type="application/rss+xml" /><item>
+    <title>python ftp客户端使用 ftplib</title>
+    <link>/posts/python-ftplib-20231201/</link>
+    <pubDate>Fri, 01 Dec 2023 10:33:17 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>/posts/python-ftplib-20231201/</guid>
+    <description><![CDATA[<p>使用python的<code>ftplib</code>进行ftp操作，是python3的标准库，不需要安装。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">ftplib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="k">class</span> <span class="nc">FTPClient</span><span class="p">():</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="s2">&#34;/&#34;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span> <span class="o">=</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">FTP</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s2">&#34;UTF-8&#34;</span>
+
+    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">local_path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        从FTP服务器下载文件到本地
+</span><span class="s2">
+</span><span class="s2">        参数：
+</span><span class="s2">        path (str): 文件所在路径
+</span><span class="s2">        filename (str): 文件名
+</span><span class="s2">        local_path (str): 本地保存路径
+</span><span class="s2">
+</span><span class="s2">        返回：  无
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="n">remote_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">remote_filename</span><span class="p">,</span>
+                            <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">remote_filename</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">listdir_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="c1"># 递归地列出指定路径下的所有文件和文件夹的名称</span>
+        <span class="n">filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_directory</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+                <span class="n">t_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listdir_recursive</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">t_files</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;unkown ftp path: </span><span class="si">%s</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">fullname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+    <span class="k">def</span> <span class="nf">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">):</span>
+        <span class="c1"># 列出路径下的文件和文件夹，非递归</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="n">remote_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">is_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        判断给定路径是否为目录
+</span><span class="s2">
+</span><span class="s2">        参数：
+</span><span class="s2">        path：要判断的路径
+</span><span class="s2">
+</span><span class="s2">        返回值：True or False
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        判断给定路径是否是一个文件
+</span><span class="s2">
+</span><span class="s2">        :param path: 文件路径
+</span><span class="s2">        :return: 若给定路径是一个文件则返回True，否则返回False
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">paths</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        将多个路径拼接成一个路径。
+</span><span class="s2">
+</span><span class="s2">        :param paths: 多个路径，可以为空
+</span><span class="s2">        :type paths: str
+</span><span class="s2">        :return: 拼接后的路径
+</span><span class="s2">        :rtype: str
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&#34;&#34;</span>
+
+        <span class="n">new_path</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="n">new_path</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sep</span>
+            <span class="n">new_path</span> <span class="o">+=</span> <span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">new_path</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        关闭FTP连接
+</span><span class="s2">
+</span><span class="s2">        :return: None
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div>]]></description>
+</item></channel>
+</rss>
