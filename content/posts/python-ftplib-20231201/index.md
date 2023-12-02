@@ -3,7 +3,7 @@ title: "python ftp客户端使用 ftplib"
 date: 2023-12-01T10:33:17+08:00
 lastmod: 2023-12-01T10:33:17+08:00
 draft: false
-author: ev01ing 
+author: ev01ing
 keepStatic: false
 auto: true
 categories: ["python"]

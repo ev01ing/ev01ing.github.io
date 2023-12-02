@@ -6,7 +6,7 @@ title = "ev01ing的个人博客"
 theme = "Loveit"
 summaryLength = "80"
 
-googleAnalytics = "G-3DF42CMVVZ"
+googleAnalytics = ""
 
 
 [author]
@@ -20,6 +20,14 @@ googleAnalytics = "G-3DF42CMVVZ"
   gitRepo = ""
   dateFormat = "2006-01-02"
   images = ["/logo.png"]
+  [params.analytics]
+    enable = true
+    # Google Analytics
+    [params.analytics.google]
+      id = "G-3DF42CMVVZ"
+      # whether to anonymize IP
+      # 是否匿名化用户 IP
+      anonymizeIP = true
 
   [params.search]
     enable = false
