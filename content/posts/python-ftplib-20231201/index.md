@@ -7,7 +7,7 @@ author: ev01ing
 keepStatic: false
 auto: true
 categories: ["python"]
-tags: ["python", "ftp", "ftplib"]
+tags: ["python","ftp","ftplib"]
 ---
 
 使用python的`ftplib`进行ftp操作，是python3的标准库，不需要安装。
